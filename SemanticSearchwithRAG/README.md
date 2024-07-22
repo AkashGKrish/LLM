@@ -21,7 +21,7 @@ To set up the project environment, follow these steps:
 
 First, clone the repository to your local machine:
 
-    $ git clone <repository-url> 
+    $ git clone <https://github.com/AkashGKrish/LLM.git> 
 
 ### 2. Python Environment Setup
 
