@@ -1,0 +1,4 @@
+llama-index-llms-ollama
+llama-index-embeddings-huggingface
+git+https://github.com/openai/CLIP.git
+llama-index-embeddings-clip
