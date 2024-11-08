@@ -1,0 +1,7 @@
+rdflib
+requests
+ollama 
+torch
+langchain-ollama
+llama_index
+chromadb
