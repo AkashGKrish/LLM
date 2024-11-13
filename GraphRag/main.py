@@ -1,4 +1,4 @@
-from kgConnection import fetch_ontology
+from kgConnection import fetch_ontology, upload_to_fuseki
 from ontoToText import get_ontology_data
 from chroma import setup_chromadb, knowledge_entities_to_chromadb
 import chromadb
@@ -109,21 +109,25 @@ def main():
     collection = setup_chromadb("Knowledge_Entities")
     logger.info("ChromaDB setup completed.")        
 
-    menu = """Make yor selection: 0, 1 or 2 
-    0) Exit
-    1) Populate DB
-    2) Start Chat
+    menu = """Make yor selection: 1, 2, 3 or 4 
+    1) Upload RDF to Fuseki
+    2) Populate Chroma DB
+    3) Start Chat
+    4) Exit
+    
     """
     
     while True:
         selection=int(input(menu))
         
-        if selection==0:
+        if selection==4:
             break
         elif selection == 1:
             populate_db(query_endpoint, collection, logger) 
         elif selection == 2:
             chat(collection, logger)
+        elif selection == 3:
+            upload_to_fuseki("rdf_data/smallOfficeGraph.ttl", query_endpoint)
 
     logger.info("Program execution completed.")
 
