@@ -13,7 +13,7 @@ def similarity_search(
     collection: chromadb.Collection, 
     prompt: str, 
     model: str = "mxbai-embed-large", 
-    num_entities: int = 5 
+    num_entities: int = 10 
 ) -> str:
     """
     Performs a similarity search using the provided prompt and model.
@@ -122,11 +122,11 @@ def main():
         
         if selection==4:
             break
-        elif selection == 1:
-            populate_db(query_endpoint, collection, logger) 
         elif selection == 2:
-            chat(collection, logger)
+            populate_db(query_endpoint, collection, logger) 
         elif selection == 3:
+            chat(collection, logger)
+        elif selection == 1:
             upload_to_fuseki("rdf_data/smallOfficeGraph.ttl", query_endpoint)
 
     logger.info("Program execution completed.")

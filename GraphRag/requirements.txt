@@ -5,3 +5,4 @@ torch
 langchain-ollama
 llama_index
 chromadb
+streamlit
