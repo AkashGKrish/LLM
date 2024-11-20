@@ -1,7 +1,7 @@
 import chromadb
 import ollama
 
-def setup_chromadb(collection_name: str) -> chromadb.Collection:
+def setup_chromadb(collection_name: str, path: str = "./chroma_data") -> chromadb.Collection:
     """
     Create a ChromaDB client and a collection for storing embeddings and text documents.
 
@@ -17,7 +17,7 @@ def setup_chromadb(collection_name: str) -> chromadb.Collection:
     # Create a ChromaDB client
     # client = chromadb.Client()
     # client = chromadb.HttpClient(host='localhost', port=8000)
-    client = chromadb.PersistentClient(path="./chroma_data")
+    client = chromadb.PersistentClient(path=path)
     # Create a collection for storing embeddings and text documents
     collection = client.get_or_create_collection(name=collection_name)
     

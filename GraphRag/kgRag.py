@@ -13,25 +13,23 @@ def get_prompt_templates(filepath):
 warnings.filterwarnings('ignore')
 
 # model="llama3.1:latest"
-model="llama3.1:70b"
+# model="llama3.1:70b"
 # model="llama3.2:latest"
-llm = OllamaLLM(model=model)
+# llm = OllamaLLM(model=model)
 
 file_path = "ontology_to_text.txt"
 
 
-
-
-def get_sparql_response(knowledge_graph,question):
+def get_sparql_response(knowledge_graph,question,model):
 
     # question="list all the concepts present in the knowledge graph"
 
     prompt_template = """
-    Task:Generate Sparql query to query a graph database.
+    Task:Generate Sparql query to query a rdf knowledge graph database like fuseki.
     Instructions:
     Use only the provided prefixes, otologies, subject, predicate, ojects and properties in the knowledge graph.
     Do not use any other relationship types,predicate, object or properties that are not provided.
-    Konwledge:
+    Semantically related Knowledge graphs are as follows:
     {knowledge_graph}
 
     Note:
@@ -47,6 +45,7 @@ def get_sparql_response(knowledge_graph,question):
 
     prompt = PromptTemplate(template=prompt_template, input_variables=["knowledge_graph", "question"])
 
+    llm = OllamaLLM(model=model)
     chain = LLMChain(llm=llm, prompt=prompt)
 
 
@@ -56,15 +55,44 @@ def get_sparql_response(knowledge_graph,question):
 
 
 
-def get_nl_response(knowledge_graph,question):
+def get_nl_response(knowledge_graph,question,model):
 
     # question="list all the concepts present in the knowledge graph"
 
     prompt_template = """
+    
+    System Prompt:
+    You are a highly capable assistant designed to interact with semantic RDF data to provide precise and factual answers. You will receive user queries along with semantically similar RDF data describing relationships, domains, ranges, and properties in natural language.
+
+    Your task is to:
+
+    Parse the RDF data to extract meaningful insights related to the user query.
+    Base your response strictly on the RDF data provided.
+    If the data does not contain enough information to answer the query, inform the user that the information is not available in the data.
+    Avoid assumptions or inferences not explicitly supported by the RDF data.
+    
+    Example:
+    User Query: "What is the range of distance?"
+    
+    RDF Data Provided:
+
+    Subject: http://purl.org/toco/hasDistance
+    Objects and Predicates:
+    - Predicate: http://www.w3.org/2000/01/rdf-schema#comment, Object: the Euclidean distance between the LiFi user equipment and access point.
+    - Predicate: http://www.w3.org/2000/01/rdf-schema#range, Object: http://www.w3.org/2001/XMLSchema#float
+    Your Response: "The range of distance is defined as a float, which typically represents a numerical value. Specifically, it describes the Euclidean distance between the LiFi user equipment and access point."
+
+    User Query: "What is the antenna height?" RDF Data Provided:
+
+    Subject: http://purl.org/toco/hasAntennaHeight
+    Objects and Predicates:
+    - Predicate: http://www.w3.org/2000/01/rdf-schema#comment, Object: the height of the antenna of a wireless interface
+    - Predicate: http://www.w3.org/2000/01/rdf-schema#range, Object: http://www.w3.org/2001/XMLSchema#float
+    Your Response: "The antenna height is described as a numerical value (float) representing the height of the antenna of a wireless interface."
     Instructions:
     Use only the provided prefixes, otologies, subject, predicate, objects and properties in the knowledge graph.
     Do not use any other relationship types,predicate, object or properties that are not provided.
-    Konwledge graph and its description is as follows:
+    Semantically related Rdf data /Konwledge graph and its description is as follows:
     {knowledge_graph}
 
     Note:
@@ -76,6 +104,7 @@ def get_nl_response(knowledge_graph,question):
     """
     prompt = PromptTemplate(template=prompt_template, input_variables=["knowledge_graph", "question"])
 
+    llm = OllamaLLM(model=model)
     chain = LLMChain(llm=llm, prompt=prompt)
 
 

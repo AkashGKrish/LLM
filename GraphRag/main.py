@@ -9,6 +9,16 @@ import warnings
 
 warnings.filterwarnings('ignore')
 
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+
+query_endpoint = os.getenv("QUERY_ENDPOINT")
+chroma_path = os.getenv("CHROMA_PATH")
+model = os.getenv("MODEL")
+rdf_file_path = os.getenv("RDF_FILE_PATH")
+
 def similarity_search(
     collection: chromadb.Collection, 
     prompt: str, 
@@ -91,7 +101,7 @@ def chat(collection, logger):
             for i, doc in enumerate(relevant_documents):
                 knowledge_graph_text+=f"{i+1}. {doc}"
             
-            response = get_sparql_response(knowledge_graph = knowledge_graph_text,question = user_prompt)
+            response = get_nl_response(knowledge_graph = knowledge_graph_text,question = user_prompt, model = model)
 
             print("Response: ",response)
         except Exception as e:
@@ -102,11 +112,10 @@ def chat(collection, logger):
 def main():
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
-    query_endpoint = 'http://localhost:3030/rdfLlmOwl'
 
     # Set up ChromaDB
     logger.info("Setting up ChromaDB")
-    collection = setup_chromadb("Knowledge_Entities")
+    collection = setup_chromadb("Knowledge_Entities", chroma_path)
     logger.info("ChromaDB setup completed.")        
 
     menu = """Make yor selection: 1, 2, 3 or 4 
@@ -127,7 +136,7 @@ def main():
         elif selection == 3:
             chat(collection, logger)
         elif selection == 1:
-            upload_to_fuseki("rdf_data/smallOfficeGraph.ttl", query_endpoint)
+            upload_to_fuseki(rdf_file_path, query_endpoint)
 
     logger.info("Program execution completed.")
 
