@@ -1,5 +1,7 @@
 # Retrievel Augmented Generation Pipeline using Pre-Trained Open Source Ollama hosted LLMs with Knowledge Graphs
 
+![Alt text](kgRAG.svg)
+
 ## Getting started
 
 1. Install requirements.txt file using pip for required libraries.
