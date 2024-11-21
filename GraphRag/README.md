@@ -20,3 +20,7 @@
     - `ollama pull mxbai-embed-large`
 4. Populate the ChromaDB vector DB with Knowledge embeddings (Have to do it only once)
 5. Now use the chat option to query, update and enhance the knowledge graph.
+
+## ToDo
+
+![Alt text](kg-llm-evaluation.drawio.svg)
